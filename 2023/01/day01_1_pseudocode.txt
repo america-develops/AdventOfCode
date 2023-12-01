@@ -1,0 +1,25 @@
+OPEN "input.txt" as inputFile
+    INITIALIZE totalCalibrationValue = 0
+    REPEAT UNTIL end of inputFile:
+        GET currentLine
+        INITIALIZE lineCalibrationValue = 0
+        // Search from beginning-to-end of line
+        FOR EACH character IN currentLine:
+            IF character IS A DIGIT:
+                UPDATE lineCalibrationValue += character
+                BREAK LOOP
+            END-IF
+        END-FOR
+        // Search from end-to-beginning of line
+        INITIALIZE index = currentLine.length - 1
+        INITIALIZE isNumber = false
+        REPEAT UNTIL isNumber IS TRUE:
+            currentChar = currentLine[index]
+            IF currentChar IS A DIGIT:
+                UDPATE isNumber = true
+                UPDATE lineCalibrationValue += currentChar
+            END-IF
+        END-REPEAT
+        UPDATE totalCalibrationValue += lineCalibrationValue
+    END-REPEAT
+CLOSE inputFile
