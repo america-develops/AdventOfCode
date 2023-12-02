@@ -2,11 +2,10 @@ OPEN "input.txt" as inputFile
     INITIALIZE totalCalibrationValue = 0
     REPEAT UNTIL end of inputFile:
         GET currentLine
-        INITIALIZE lineCalibrationValue = 0
         // Search from beginning-to-end of line
         FOR EACH character IN currentLine:
             IF character IS A DIGIT:
-                UPDATE lineCalibrationValue += character
+                SET firstDigit = character
                 BREAK LOOP
             END-IF
         END-FOR
@@ -17,9 +16,10 @@ OPEN "input.txt" as inputFile
             currentChar = currentLine[index]
             IF currentChar IS A DIGIT:
                 UDPATE isNumber = true
-                UPDATE lineCalibrationValue += currentChar
+                SET secondDigit = currentChar
             END-IF
         END-REPEAT
+        SET lineCalibrationValue = firstDigit CONCAT secondDigit
         UPDATE totalCalibrationValue += lineCalibrationValue
     END-REPEAT
 CLOSE inputFile
