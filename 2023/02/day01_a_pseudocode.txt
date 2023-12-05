@@ -1,0 +1,51 @@
+CLASS Game:
+    // Attributes
+    DECLARE int id
+    DECLARE list<GameSubset> subsetList
+    DECLARE boolean isPossible
+
+    CONSTRUCTOR Game(p_Id):
+        SET this->id = p_Id
+        SET this->isPossible = TRUE
+    END-CONSTRUCTOR
+END-CLASS
+
+CLASS GameSubset:
+    // Attributes
+    DECLARE int numRed
+    DECLARE int numGreen
+    DECLARE int numBlue
+END-CLASS
+
+SET const int MAX_RED = 12
+SET const int MAX_GREEN = 13
+SET const int MAX_BLUE = 14
+DECLARE Dictionary<int:Game> gameMapping
+
+OPEN "input.txt" as inputFile
+    FOR EACH line IN inputFile:
+        EXTRACT gameId
+        INSTANTIATE gameMapping[gameId] = new Game(gameId)
+        PARTITION line AT EVERY ';' character
+        FOR EACH partition:
+            INSTANTIATE currentSubset as new GameSubset
+            currentSubset.numRed = GET numRed FROM partition
+            currentSubset.numGreen = GET numGreen FROM partition
+            currentSubset.numBlue = GET numBlue FROM partition
+            APPEND currentSubset TO gameMapping[gameId].subsetList
+            IF (numRed > MAX_RED) OR (numGreen > MAX_GREEN) OR (numBlue > MAX_BLUE):
+                gameMapping[gameId].isPossible = FALSE
+            END-IF
+        END-FOR
+    END-FOR
+CLOSE inputFile
+
+INITIALIZE sumOfPossibleGameIds = 0
+FOR EACH gameId IN gameMapping:
+    game = gameMapping[gameId]
+    IF game.isPossible IS TRUE:
+        ADD gameId TO sumOfPossibleGameIds
+    END-IF
+END-FOR
+
+OUTPUT sumOfPossibleGameIds
