@@ -28,13 +28,13 @@ FUNCTION CheckAdjacentCells(current row, current column):
         // Iterate through columns
         FOR column = prevColumn TO nextColumn
             // No need to check center cell
-            IF row IS NOT current row AND column IS NOT current column:
+            IF row IS NOT current row OR column IS NOT current column:
                 IF partNumbers[row, column] DOES NOT EXIST:
                     SET adjacentCell = inputFileArray[row, column]
                     IF adjacentCell IS A DIGIT:
                         SET extractedNumber = ExtractRemainingNumberString(inputFileArray[row], column]
-                        SET startColumn = extractedNumber[0]
-                        SET numberString = extractedNumber[1]
+                        SET numberString = extractedNumber[0]
+                        SET startColumn = extractedNumber[1]
                         MAP numberString TO partNumbers[row, startColumn]
                         IF numberString.length > 1:
                             INITIALIZE nextIndex = startColumn + 1
@@ -71,5 +71,5 @@ FUNCTION ExtractRemainingNumberString(lineString, currentIndex):
         INCREMENT rightIndex
         UPDATE rightChar = lineString[rightIndex]
     END-WHILE
-    RETURN [startIndex, numberString]
+    RETURN [numberString, startIndex]
 END-FUNCTION
