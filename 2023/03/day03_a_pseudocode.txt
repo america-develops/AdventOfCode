@@ -23,54 +23,31 @@ FUNCTION CheckAdjacentCells(current row, current column):
     INITIALIZE nextRow = current row + 1
     INITIALIZE prevColumn = current column - 1
     INITIALIZE nextColumn = current column + 1
-    // Check upper-left cell
-    IF partNumbers[prevRow, prevColumn] DOES NOT EXIST:
-        IF inputFileArray[prevRow, prevColumn] IS A NUMBER:
-            MAP inputFileArray[prevRow, prevColumn] to partNumbers[prevRow, prevColumn]
-        END-IF
-    END-IF
-    // Check above cell
-    IF partNumbers[prevRow, current column] DOES NOT EXIST:
-        IF inputFileArray[prevRow, current column] IS A NUMBER:
-            MAP inputFileArray[prevRow, current column] to partNumbers[prevRow, current column]
-        END-IF
-    END-IF
-    // Check upper-right cell
-    IF partNumbers[prevRow, nextColumn] DOES NOT EXIST:
-        IF inputFileArray[prevRow, nextColumn] IS A NUMBER:
-            MAP inputFileArray[prevRow, nextColumn] to partNumbers[prevRow, nextColumn]
-        END-IF
-    END-IF
-    // Check left cell
-    IF partNumbers[current row, prevColumn] DOES NOT EXIST:
-        IF inputFileArray[current row, prevColumn] IS A NUMBER:
-            MAP inputFileArray[current row, prevColumn] to partNumbers[current row, prevColumn]
-        END-IF
-    END-IF
-    // Check right cell
-    IF partNumbers[current row, nextColumn] DOES NOT EXIST:
-        IF inputFileArray[current row, nextColumn] IS A NUMBER:
-            MAP inputFileArray[current row, nextColumn] to partNumbers[current row, nextColumn]
-        END-IF
-    END-IF
-    // Check lower-left cell
-    IF partNumbers[nextRow, prevColumn] DOES NOT EXIST:
-        IF inputFileArray[nextRow, prevColumn] IS A NUMBER:
-            MAP inputFileArray[nextRow, prevColumn] to partNumbers[nextRow, prevColumn]
-        END-IF
-    END-IF
-    // Check below cell
-    IF partNumbers[nextRow, current column] DOES NOT EXIST:
-        IF inputFileArray[nextRow, current column] IS A NUMBER:
-            MAP inputFileArray[nextRow, current column] to partNumbers[nextRow, current column]
-        END-IF
-    END-IF
-    // Check lower-right cell
-    IF partNumbers[nextRow, nextColumn] DOES NOT EXIST:
-        IF inputFileArray[nextRow, nextColumn] IS A NUMBER:
-            MAP inputFileArray[nextRow, nextColumn] to partNumbers[nextRow, nextColumn]
-        END-IF
-    END-IF
+    // Iterate through rows
+    FOR row = prevRow TO nextRow:
+        // Iterate through columns
+        FOR column = prevColumn TO nextColumn
+            // No need to check center cell
+            IF row IS NOT current row AND column IS NOT current column:
+                IF partNumbers[row, column] DOES NOT EXIST:
+                    SET adjacentCell = inputFileArray[row, column]
+                    IF adjacentCell IS A DIGIT:
+                        SET extractedNumber = ExtractRemainingNumberString(inputFileArray[row], column]
+                        SET startColumn = extractedNumber[0]
+                        SET numberString = extractedNumber[1]
+                        MAP numberString TO partNumbers[row, startColumn]
+                        IF numberString.length > 1:
+                            INITIALIZE nextIndex = startColumn + 1
+                            INITIALIZE endIndex = startColumn + numberString.length - 1
+                            FOR index = nextIndex TO endIndex:
+                                MAP null TO partsMapping[row, index]
+                            END-FOR
+                        END-IF
+                    END-IF
+                END-IF
+            END-IF
+        END-FOR
+    END-FOR
 END-FUNCTION
 
 
@@ -80,8 +57,10 @@ FUNCTION ExtractRemainingNumberString(lineString, currentIndex):
     INITIALIZE rightIndex = currentIndex + 1
     INITIALIZE leftChar = lineString[leftIndex]
     INITIALIZE rightChar = lineString[rightIndex]
+    INITIALIZE startIndex = currentIndex
     // Search to the left
     WHILE leftChar IS A DIGIT:
+        DECREMENT startIndex
         UPDATE numberString = leftChar + numberString
         DECREMENT leftIndex
         UPDATE leftChar = lineString[leftIndex]
@@ -92,5 +71,5 @@ FUNCTION ExtractRemainingNumberString(lineString, currentIndex):
         INCREMENT rightIndex
         UPDATE rightChar = lineString[rightIndex]
     END-WHILE
-    RETURN numberString
+    RETURN [startIndex, numberString]
 END-FUNCTION
