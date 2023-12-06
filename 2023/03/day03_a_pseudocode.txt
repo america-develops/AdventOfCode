@@ -72,3 +72,25 @@ FUNCTION CheckAdjacentCells(current row, current column):
         END-IF
     END-IF
 END-FUNCTION
+
+
+FUNCTION ExtractRemainingNumberString(lineString, currentIndex):
+    INITIALIZE numberString = lineString[currentIndex]
+    INITIALIZE leftIndex = currentIndex - 1
+    INITIALIZE rightIndex = currentIndex + 1
+    INITIALIZE leftChar = lineString[leftIndex]
+    INITIALIZE rightChar = lineString[rightIndex]
+    // Search to the left
+    WHILE leftChar IS A DIGIT:
+        UPDATE numberString = leftChar + numberString
+        DECREMENT leftIndex
+        UPDATE leftChar = lineString[leftIndex]
+    END-WHILE
+    // Search to the right
+    WHILE rightChar IS A DIGIT:
+        UPDATE numberString = numberString + rightChar
+        INCREMENT rightIndex
+        UPDATE rightChar = lineString[rightIndex]
+    END-WHILE
+    RETURN numberString
+END-FUNCTION
