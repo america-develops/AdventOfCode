@@ -1,8 +1,6 @@
 # GLOBAL VARIABLES
 # ----------------
 cardsMapping = dict()
-cardCopiesCount = dict()
-cardMatchesCount = dict()
 
 # CLASSES
 # -------
@@ -36,8 +34,6 @@ class Card:
                     if num.isdigit() and num in self.winningNums:
                         matchCount += 1
                 self.numMatches = matchCount
-                # Update match dictionary
-                cardMatchesCount[self.id] = self.numMatches
                 # Update flag
                 self.numMatchesCounted = True
 
@@ -68,7 +64,7 @@ def CalculateReturnedCards(p_Card : Card):
 # MAIN PROGRAM
 # ------------
 # Extract file contents
-filePath = "demo.txt"
+filePath = "input.txt"
 inputFile = open(filePath, 'r')
 lines = inputFile.readlines()
 inputFile.close()
@@ -83,7 +79,6 @@ for line in lines:
     if cardId > cardIdMax: cardIdMax = cardId
     # Add card to collection
     cardsMapping[cardId] = Card(cardId)
-    cardCopiesCount[cardId] = 1
     # Extract winning numbers
     winningNumString = line[slice(colonIndex + 1, separatorIndex)]
     cardsMapping[cardId].setWinningNums(winningNumString.strip())
