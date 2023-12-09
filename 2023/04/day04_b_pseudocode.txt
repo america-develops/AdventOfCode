@@ -12,7 +12,9 @@ FUNCTION CalculateReturnedCards(Card X_x):
             currentReturnedCards = CalculateReturnedCards(Card X_(x+i))
             INCREMENT totalReturnedCards BY currentReturnedCards
         END-FOR
+
+        X_x RETURNS totalReturnedCards
     ELSE:
-        X_x RETURNS 0 Cards
+        X_x RETURNS 0
     END-IF
 END-FUNCTION
