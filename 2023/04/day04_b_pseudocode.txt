@@ -1,0 +1,18 @@
+FUNCTION CalculateReturnedCards(Card X_x):
+    LET x = X_x.id
+    LET n = X_x.numMatches
+
+    IF n IS GREATER THAN 0:
+        Returned cards are [X_(x+i)] WHERE i = 1 TO n (inclusive)
+        Therefore, the length of [X_(x+i)] is n
+
+        INITIALIZE totalReturnedCards = n
+
+        FOR i = 1 TO n:
+            currentReturnedCards = CalculateReturnedCards(Card X_(x+i))
+            INCREMENT totalReturnedCards BY currentReturnedCards
+        END-FOR
+    ELSE:
+        X_x RETURNS 0 Cards
+    END-IF
+END-FUNCTION
