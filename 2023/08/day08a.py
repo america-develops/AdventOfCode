@@ -10,14 +10,13 @@ class Node:
 # GLOBAL VARIABLES
 # ----------------
 nodes = dict()
-headNode = None
 
 
 # MAIN PROGRAM
 # ------------
 # Extract file contents
 # ---------------------
-filePath = "demo2.txt"
+filePath = "input.txt"
 inputFile = open(filePath, 'r')
 lines = inputFile.readlines()
 inputFile.close()
@@ -39,14 +38,10 @@ for index in range(2, len(lines)):
     print('right node:', rightNode)
     # Add node
     nodes[nodeId] = Node(nodeId, leftNode, rightNode)
-    # Update head node (if necessary)
-    if not headNode:
-        headNode = nodes[nodeId]
-        print("HEAD NODE:", headNode.id)
 print('\n')
 # Travel through nodes
 # --------------------
-currentNode = headNode
+currentNode = nodes['AAA']
 endNode = 'ZZZ'
 numSteps = 0
 index = 0
