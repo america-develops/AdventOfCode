@@ -38,3 +38,10 @@
     // ------
     marginOfError = numWaysToWin_race1 * numWaysToWin_race2 * ... * numWaysToWin_raceN
 
+
+// PROCESSES
+// ---------
+    // Determine minimum time press to win for a race
+    // ----------------------------------------------
+    maxTravelSpeed = (raceTime - 1) * SPEED_INCREASE_PER_TIME_PRESSED
+
