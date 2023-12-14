@@ -1,0 +1,72 @@
+// GLOBAL CONSTANTS
+// ----------------
+LET SPEED_INCREASE_PER_TIME_PRESSED = 1
+
+
+// GLOBAL VARIABLES
+// ----------------
+DECLARE raceList AS List<Race>
+
+
+// CLASSES
+// -------
+CLASS Race
+    // Attributes
+    // ----------
+    DECLARE id AS Integer
+    DECLARE raceTime AS Integer
+    DECLARE recordDistance AS Integer
+    DECLARE minTimePressedToWin AS Integer
+    DECLARE maxTimePressedToWin AS Integer
+    DECLARE numWaysToWin AS Integer
+
+    // Constructors
+    // ------------
+    CONSTRUCTOR Race(Integer p_id, Integer p_raceTime, Integer p_recordDistance):
+        self.id = p_id
+        self.raceTime = p_raceTime
+        self.recordDistance = p_recordDistance
+        self.minTimePressedToWin = self.CalcMinTimePressedToWin()
+        self.maxTimePressedToWin = self.raceTime - self.minTimePressedToWin
+        self.numWaysToWin = self.CalcNumWaysToWin()
+    END-CONSTRUCTOR
+
+    // Methods
+    // -------
+    METHOD CalcMinTimePressedToWin():
+        INITIALIZE timePress = Floor(raceTime / 2)
+        DO:
+            SET minTimePress = timePress
+            CALCULATE travelSpeed = timePress * SPEED_INCREASE_PER_TIME_PRESSED = 1
+            CALCULATE distanceTraveled = timePress * travelSpeed
+            DECREMENT timePress BY 1
+        WHILE distanceTraveled > recordDistance
+        RETURN minTimePress
+    END-METHOD
+
+    METHOD CalcNumWaysToWin():
+        // NOTE: Range is *inclusive* here
+        numWaysToWin = RANGE([self.minTimePressedToWin, self.maxTimePressedToWin])
+        RETURN numWaysToWin
+    END-METHOD
+END-CLASS
+
+
+// MAIN PROGRAM
+// ------------
+OPEN "input.txt" AS inputFile
+    // Extract list of times from first line in inputFile
+    // Extract list of record distances from second line in inputFile
+    FOR index = 0 TO raceTimes.length - 1 (inclusive):
+        SET currentTime = raceTimes[index]
+        SET currentRecordDist = raceRecordDistances[index]
+        SET currentRace = NEW Race(index, currentTime, currentRecordDist)
+        APPEND currentRace TO raceList
+    END-FOR
+CLOSE inputFile
+
+// Calculate margin of error
+INITIALIZE marginOfError = 1
+FOR EACH race IN raceList:
+    UPDATE marginOfError = marginOfError * race.numWaysToWin
+END-FOR
