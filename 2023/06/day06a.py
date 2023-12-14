@@ -41,10 +41,17 @@ class Race:
 # ------------
 # FIXME: Change below code to automatically extract data from input file
 
-# Populate race list
+'''
+# Populate race list (using demo input)
 raceList.append(Race(0, 7, 9))
 raceList.append(Race(1, 15, 40))
 raceList.append(Race(2, 30, 200))
+'''
+# Populate race list
+raceList.append(Race(0, 62, 553))
+raceList.append(Race(1, 64, 1010))
+raceList.append(Race(2, 91, 1473))
+raceList.append(Race(3, 90, 1074))
 # Calculate margin of error
 marginOfError = 1
 for race in raceList:
