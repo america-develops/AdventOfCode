@@ -39,9 +39,40 @@
     marginOfError = numWaysToWin_race1 * numWaysToWin_race2 * ... * numWaysToWin_raceN
 
 
-// PROCESSES
-// ---------
-    // Determine minimum time press to win for a race
-    // ----------------------------------------------
-    maxTravelSpeed = (raceTime - 1) * SPEED_INCREASE_PER_TIME_PRESSED
+// CLASSES
+// -------
+    CLASS Race:
+        // ATTRIBUTES
+        // ----------
+        INTEGER id
+        INTEGER raceTime
+        INTEGER recordDistance
+        INTEGER minTimePressedToWin
+        INTEGER maxTimePressedToWin
+
+        CONSTRUCTOR Race(p_id, p_raceTime, p_recordDistance):
+            self.id = p_id
+            self.raceTime = p_raceTime
+            self.recordDistance = p_recordDistance
+            self.minTimePressedToWin = CalcMinTimePressedToWin()
+            self.maxTimePressedToWin = self.raceTime - self.minTimePressedToWin
+        END-CONSTRUCTOR
+
+        METHOD CalcMinTimePressedToWin():
+            INITIALIZE timePress = Floor(raceTime / 2)
+            DO:
+                SET minTimePress = timePress
+                CALCULATE travelSpeed = timePress * SPEED_INCREASE_PER_TIME_PRESSED
+                CALCULATE distanceTraveled = timePress * travelSpeed
+                DECREMENT timePress BY 1
+            WHILE distanceTraveled > recordDistance
+            RETURN minTimePress
+        END-METHOD
+
+        METHOD CalcNumWaysToWin():
+            // NOTE: Range is *inclusive* here
+            numWaysToWin = RANGE[self.minTimePressedToWin, self.maxTimePressedToWin]
+        END-METHOD
+
+    END-CLASS
 
