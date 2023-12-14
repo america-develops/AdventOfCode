@@ -54,9 +54,31 @@ END-CLASS
 
 // MAIN PROGRAM
 // ------------
+DECLARE raceTimes AS List<Integer>
+DECLARE recordDistances AS List<Integer>
 OPEN "input.txt" AS inputFile
     // Extract list of times from first line in inputFile
+    // --------------------------------------------------
+    SET timesLineString = inputFile[FIRST LINE]
+    SET colonIndex = GET INDEX OF ':' FROM timesLineString
+    REMOVE characters up to and including colonIndex FROM timesLineString
+    TRIM timesLineString of terminating whitespaces
+    FOR EACH word IN timesLineString:
+        TYPECAST word TO Integer
+        APPEND word TO raceTimes
+    END-FOR
     // Extract list of record distances from second line in inputFile
+    // --------------------------------------------------------------
+    SET distancesLineString = inputFile[SECOND LINE]
+    SET colonIndex = GET INDEX OF ':' FROM distancesLineString
+    REMOVE characters up to and including colonIndex FROM distancesLineString
+    TRIM distancesLineString of terminating whitespaces
+    FOR EACH word IN distancesLineString:
+        TYPECAST word TO Integer
+        APPEND word TO recordDistances
+    END-FOR
+    // Create races from time and record distance lists
+    // ------------------------------------------------
     FOR index = 0 TO raceTimes.length - 1 (inclusive):
         SET currentTime = raceTimes[index]
         SET currentRecordDist = raceRecordDistances[index]
