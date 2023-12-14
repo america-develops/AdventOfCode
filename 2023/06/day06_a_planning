@@ -1,0 +1,40 @@
+// VARIABLES
+// ---------
+    // KNOWN VALUES (GLOBAL)
+    // ---------------------
+    START_SPEED = 0 mm/ms
+    SPEED_INCREASE_PER_TIME_PRESSED = 1 mm/ms
+
+    // KNOWN VALUES (PER RACE)
+    // -----------------------
+    raceTime (in ms)
+    recordDistance (in mm)
+
+    // UNKNOWN VALUES (PER RACE)
+    // -------------------------
+    timePressed (in ms)
+    timeTraveled (in ms)
+    travelSpeed (in mm/ms)
+    distanceTravelled (in mm)
+    numWaysToWin
+    minTimePressedToWin (in ms)
+    maxTimePressedToWin (in ms)
+
+    // UNKNOWN VALUES (GLOBAL)
+    // -----------------------
+    marginOfError
+
+
+// FORMULAS
+// --------
+    // PER RACE
+    // --------
+    timeTraveled = raceTime - timePressed
+    travelSpeed = timePressed * SPEED_INCREASE_PER_TIME_PRESSED
+    distanceTraveled = travelSpeed * timeTraveled
+    numWaysToWin = maxTimePressedToWin - minTimePressedToWin + 1
+
+    // GLOBAL
+    // ------
+    marginOfError = numWaysToWin_race1 * numWaysToWin_race2 * ... * numWaysToWin_raceN
+
