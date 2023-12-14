@@ -36,9 +36,9 @@ CLASS Race
     METHOD CalcMinTimePressedToWin():
         INITIALIZE timePress = Floor(raceTime / 2)
         DO:
-            SET minTimePress = timePress
             CALCULATE travelSpeed = timePress * SPEED_INCREASE_PER_TIME_PRESSED = 1
             CALCULATE distanceTraveled = timePress * travelSpeed
+            SET minTimePress = timePress
             DECREMENT timePress BY 1
         WHILE distanceTraveled > recordDistance
         RETURN minTimePress
