@@ -50,7 +50,7 @@ def predictNextValue(p_valueHistory : list):
 # ------------
 # Extract file contents
 # ---------------------
-filePath = "demo.txt"
+filePath = "input.txt"
 inputFile = open(filePath, 'r')
 lines = inputFile.readlines()
 inputFile.close()
@@ -67,6 +67,10 @@ del line
 del lines
 # Predict next values
 # -------------------
+sumOfExtrapolatedValues = 0
 for history in valueHistories:
-    valuePredictions.append(predictNextValue(history))
+    extrapolatedValue = predictNextValue(history)
+    valuePredictions.append(extrapolatedValue)
+    sumOfExtrapolatedValues += extrapolatedValue
 print('Value predictions:', valuePredictions)
+print('SUM OF EXTRAPOLATED VALUES:', sumOfExtrapolatedValues)
