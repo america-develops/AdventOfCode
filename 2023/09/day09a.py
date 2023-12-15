@@ -31,8 +31,19 @@ def getAllDifferenceSequences(p_valueHistory : list):
 
 def predictNextValue(p_valueHistory : list):
     recursiveDifferences = getAllDifferenceSequences(p_valueHistory)
-
-    return -1
+    # First add an additional zero to last sequence
+    lineIndex = len(recursiveDifferences) - 1
+    recursiveDifferences[lineIndex].append(0)
+    lineIndex -= 1
+    while lineIndex >= 0:
+        currentLine = recursiveDifferences[lineIndex]
+        belowLine = recursiveDifferences[lineIndex + 1]
+        belowLineLastValue = belowLine[len(belowLine) - 1]
+        currentLineLastValue = currentLine[len(currentLine) - 1]
+        currentLineNextValue = currentLineLastValue + belowLineLastValue
+        recursiveDifferences[lineIndex].append(currentLineNextValue)
+        lineIndex -=1
+    return currentLineNextValue
 
 
 # MAIN PROGRAM
