@@ -29,15 +29,27 @@ def getAllDifferenceSequences(p_valueHistory : list):
     return differenceSequences
 
 def predictPrecedingValue(p_valueHistory : list):
-    pass
-    return -1
+    recursiveDifferences = getAllDifferenceSequences(p_valueHistory)
+    # First add a preceding zero to last row
+    lineIndex = len(recursiveDifferences) - 1
+    recursiveDifferences[lineIndex].insert(0, 0)
+    lineIndex -= 1
+    while lineIndex >= 0:
+        currentLine = recursiveDifferences[lineIndex]
+        belowLine = recursiveDifferences[lineIndex + 1]
+        belowLineFirstValue = belowLine[0]
+        currentLineFirstValue = currentLine[0]
+        currentLinePrecedingValue = currentLineFirstValue - belowLineFirstValue
+        recursiveDifferences[lineIndex].insert(0, currentLinePrecedingValue)
+        lineIndex -= 1
+    return currentLinePrecedingValue
 
 
 # MAIN PROGRAM
 # ------------
 # Extract file contents
 # ---------------------
-filePath = "input.txt"
+filePath = "demo.txt"
 inputFile = open(filePath, 'r')
 lines = inputFile.readlines()
 inputFile.close()
