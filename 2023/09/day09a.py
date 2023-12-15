@@ -17,12 +17,21 @@ def getDifferencesSequence(p_numList : list):
     for index in range (0, len(differencesSequence)):
         difference = p_numList[index + 1] - p_numList[index]
         differencesSequence[index] = difference
-    print('Differences for', p_numList, 'is', differencesSequence)
+    #print('Differences for', p_numList, 'is', differencesSequence)
     return differencesSequence
 
+def getAllDifferenceSequences(p_valueHistory : list):
+    differenceSequences = [p_valueHistory]
+    currentDifferences = getDifferencesSequence(p_valueHistory)
+    differenceSequences.append(currentDifferences)
+    while not isAllZeroes(currentDifferences):
+        currentDifferences = getDifferencesSequence(currentDifferences)
+        differenceSequences.append(currentDifferences)
+    return differenceSequences
+
 def predictNextValue(p_valueHistory : list):
-    differences = list()
-    differences.append(getDifferencesSequence(p_valueHistory))
+    recursiveDifferences = getAllDifferenceSequences(p_valueHistory)
+
     return -1
 
 
