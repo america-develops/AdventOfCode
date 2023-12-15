@@ -49,7 +49,7 @@ def predictPrecedingValue(p_valueHistory : list):
 # ------------
 # Extract file contents
 # ---------------------
-filePath = "demo.txt"
+filePath = "input.txt"
 inputFile = open(filePath, 'r')
 lines = inputFile.readlines()
 inputFile.close()
