@@ -6,8 +6,14 @@ CARD_LABELS = (
     '7', '8', '9', 'T', 'J',
     'Q', 'K', 'A'
 )
+CARD_LABELS = {
+    '2' : 0, '3' : 1, '4' : 2, '5' : 3, '6' : 4,
+    '7' : 5, '8' : 6, '9' : 7, 'T' : 8, 'J' : 9,
+    'Q' : 10, 'K' : 11, 'A' : 12
+
+}
 # Types of hands in ascending order of relative strength
-HAND_TYPES = (
+HAND_TYPE_LABELS = (
     'High card',
     'One pair',
     'Two pair',
@@ -16,17 +22,28 @@ HAND_TYPES = (
     'Four of a kind',
     'Five of a kind'
 )
+HAND_TYPES = (
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+)
 
 
 # GLOBAL VARIABLES
 # ----------------
+cardLabelStrength = dict()
+handTypeStrength = dict()
 handsMap = dict()
 
 
 # CLASSES
 # -------
 class Hand:
-    def __init__(self, p_handString, p_bid):
+    def __init__(self, p_handString : str, p_bid : int):
         self.cards = p_handString
         self.bid = p_bid
         self.type = self.determineHandType()
@@ -84,6 +101,12 @@ class Hand:
 
 # MAIN PROGRAM
 # ------------
+# Populate strength maps
+# ----------------------
+for index in range(0, len(CARD_LABELS)):
+    cardLabelStrength[CARD_LABELS[index]] = index
+for index in range(0, len(HAND_TYPES)):
+    handTypeStrength[HAND_TYPES[index]] = index
 # Extract file contents
 # ---------------------
 filePath = "demo.txt"
@@ -96,9 +119,42 @@ del filePath
 # -----------------------------
 for line in lines:
     # Extract hand
-    handString = line[0:4]
-    
+    handString = line[0:5].strip()
+    # Extract bid
+    bid : int = int(line[6:len(line)].strip())
+    # Add new hand to map
+    newHand = Hand(handString, bid)
+    if newHand.type in handsMap:
+        # FIXME: Insert in strength order
+        lastHandIndex = len(handsMap[newHand.type]) - 1
+        currentHandIndex = lastHandIndex
+        while currentHandIndex >= 0:
+            currentHand = handsMap[newHand.type][currentHandIndex]
+            # Compare individual cards between hands
+            for cardIndex in range(0, len(newHand.cards)):
+                currentHandCard = currentHand.cards[cardIndex]
+                newHandCard = newHand.cards[cardIndex]
+                if currentHandCard == newHandCard: continue
+                else:
+                    # Check if current hand's card is stronger
+                    if cardLabelStrength[currentHandCard] > cardLabelStrength[newHandCard]:
+                        # Insert new card just before current card
+                        handsMap[newHand.type].insert(currentHandIndex, newHand)
+                        break
+                    else:
+                        # If current card is last card, insert new card at the end
+                        if currentHandIndex == lastHandIndex:
+                            handsMap[newHand.type].append(newHand)
+                            break
+                        else:
+                            handsMap[newHand.type].insert(currentHandIndex + 1, newHand)
+                            break
+            currentHandIndex -= 1
 
+    else:
+        handsMap[newHand.type] = [newHand]
+
+print()
 '''hands.append('AAAAA')
 hands.append('AA8AA')
 hands.append('AAAA8')
